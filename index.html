@@ -1,40 +1,148 @@
 <!DOCTYPE html>
-
 <html lang="fa" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<title>دستیار طلا</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>دستیار هوشمند معاملات طلا</title>
 
 <style>
-
-body{
-background:#121212;
-color:white;
-font-family:tahoma;
-padding:30px;
+:root{
+--bg-color:#121212;
+--card-bg:#1e1e1e;
+--accent-gold:#ffd700;
+--text-main:#fff;
+--text-muted:#b3b3b3;
+--border-color:#333;
+--success-color:#2ecc71;
+--warning-color:#e74c3c;
 }
 
-.box{
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
 
-background:#222;
+body{
+background:var(--bg-color);
+color:var(--text-main);
+display:flex;
+justify-content:center;
 padding:20px;
+}
+
+.container{
+width:100%;
+max-width:480px;
+background:var(--card-bg);
+padding:24px;
 border-radius:20px;
+border:1px solid var(--border-color);
+}
 
-max-width:400px;
-margin:auto;
+h1{
+color:var(--accent-gold);
+text-align:center;
+margin-bottom:20px;
+}
 
+input{
+width:100%;
+padding:14px;
+border-radius:10px;
+border:1px solid var(--border-color);
+background:#262626;
+color:white;
+margin-top:6px;
+text-align:left;
 }
 
 button{
-
 width:100%;
 padding:15px;
-background:#ffd700;
-border:0;
+margin-top:10px;
+background:var(--accent-gold);
+border:none;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.result{
+margin-top:15px;
+padding:10px;
+background:#262626;
 border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>دستیار طلا</h1>
+
+<label>دلار</label>
+<input id="usdPrice">
+
+<label>انس</label>
+<input id="ouncePrice">
+
+<label>طلای ۱۸</label>
+<input id="goldPrice18">
+
+<button id="btnUpdate">⚡ بروزرسانی قیمت‌ها</button>
+
+<div class="result">
+<div>ارزش ذاتی: <span id="intrinsicValue">0</span></div>
+<div>حباب: <span id="bubbleValue">0</span></div>
+<div>درصد: <span id="bubblePercent">0%</span></div>
+</div>
+
+<button id="btnCalc">محاسبه</button>
+
+</div>
+
+<script>
+
+const WORKER_URL = "https://gold-api.ardism.workers.dev";
+
+async function updatePrices(){
+
+const res = await fetch(WORKER_URL);
+const data = await res.json();
+
+document.getElementById("usdPrice").value = data.usd;
+document.getElementById("ouncePrice").value = data.ounce;
+document.getElementById("goldPrice18").value = data.gold18;
+
+}
+
+document.getElementById("btnUpdate")
+.addEventListener("click", updatePrices);
+
+
+document.getElementById("btnCalc")
+.addEventListener("click", ()=>{
+
+const usd = parseFloat(document.getElementById("usdPrice").value.replace(/,/g,''));
+const ounce = parseFloat(document.getElementById("ouncePrice").value.replace(/,/g,''));
+const gold18 = parseFloat(document.getElementById("goldPrice18").value.replace(/,/g,''));
+
+if(!usd || !ounce || !gold18) return;
+
+const intrinsic = (usd * ounce) / 41.4713;
+const bubble = gold18 - intrinsic;
+const percent = (bubble / intrinsic) * 100;
+
+document.getElementById("intrinsicValue").innerText = Math.round(intrinsic);
+document.getElementById("bubbleValue").innerText = Math.round(bubble);
+document.getElementById("bubblePercent").innerText = percent.toFixed(2) + "%";
+
+});
+
+</script>
+
+</body>
+</html>border-radius:10px;
 font-size:18px;
 
 }
