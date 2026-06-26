@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>دستیار طلا</title>
+
+<style>
+
+body{
+background:#121212;
+color:white;
+font-family:tahoma;
+padding:30px;
+}
+
+.box{
+
+background:#222;
+padding:20px;
+border-radius:20px;
+
+max-width:400px;
+margin:auto;
+
+}
+
+button{
+
+width:100%;
+padding:15px;
+background:#ffd700;
+border:0;
+border-radius:10px;
+font-size:18px;
+
+}
+
+
+h1{
+color:#ffd700;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+<h1>
+دستیار طلا
+</h1>
+
+
+<p>
+دلار:
+<span id="usd">---</span>
+</p>
+
+
+<p>
+طلای ۱۸:
+<span id="gold">---</span>
+</p>
+
+
+<p>
+انس:
+<span id="ounce">---</span>
+</p>
+
+
+<button onclick="updatePrice()">
+
+بروزرسانی قیمت
+
+</button>
+
+
+</div>
+
+
+
+<script>
+
+
+async function updatePrice(){
+
+
+let res = await fetch(
+"https://YOUR-WORKER.workers.dev"
+);
+
+
+let data = await res.json();
+
+
+
+document.getElementById("usd")
+.innerText =
+data.usd;
+
+
+
+document.getElementById("gold")
+.innerText =
+data.gold18;
+
+
+
+document.getElementById("ounce")
+.innerText =
+data.ounce;
+
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
